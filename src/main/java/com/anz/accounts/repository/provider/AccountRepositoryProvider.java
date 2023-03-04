@@ -1,12 +1,14 @@
 package com.anz.accounts.repository.provider;
 
-import com.anz.accounts.repository.model.Account;
+import com.anz.accounts.repository.model.AccountList;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface AccountRepositoryProvider extends CrudRepository<Account, Long> {
+@Repository
+public interface AccountRepositoryProvider extends CrudRepository<AccountList, Long> {
 
-    List<Account> findAllByCustomerId(long customerId);
+    List<AccountList> findAllByCustomerId(long customerId);
 
 }
