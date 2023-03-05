@@ -2,7 +2,7 @@ package com.anz.accounts.blackbox;
 
 
 import com.anz.accounts.AccountsApplication;
-import com.anz.accounts.api.AccountList;
+import com.anz.accounts.api.Accounts;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +24,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles("test")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"/db/cleanup.sql", "/db/accounts.sql"})
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = {"/db/cleanup.sql"})
-public class AccountsTest {
+public class AccountTest {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Test
     void getAccounts_200() {
-        ResponseEntity<AccountList> responseEntity = this.testRestTemplate.getForEntity("http://localhost:8080/v1/accounts/200", AccountList.class);
-        AccountList body = responseEntity.getBody();
+        ResponseEntity<Accounts> responseEntity = this.testRestTemplate.getForEntity("http://localhost:8080/v1/accounts/200", Accounts.class);
+        Accounts body = responseEntity.getBody();
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(body);
         assertEquals(2, body.getAccounts().size());
+    }
+
+
+    @Test
+    void getAccounts_400() {
+        ResponseEntity<Accounts> responseEntity = this.testRestTemplate.getForEntity("http://localhost:8080/v1/accounts/ABC", Accounts.class);
+        Accounts body = responseEntity.getBody();
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertNotNull(body);
     }
 }

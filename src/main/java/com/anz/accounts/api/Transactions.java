@@ -11,6 +11,6 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class Accounts {
-    private List<Account> accounts;
+public class Transactions {
+    private List<Transaction> transactions;
 }

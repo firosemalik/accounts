@@ -1,7 +1,7 @@
-package com.anz.accounts.component.service;
+package com.anz.accounts.service;
 
 import com.anz.accounts.AccountsApplication;
-import com.anz.accounts.api.Accounts;
+import com.anz.accounts.api.Account;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,14 +16,14 @@ import java.util.List;
 @ActiveProfiles("test")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"/db/cleanup.sql", "/db/accounts.sql"})
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = {"/db/cleanup.sql"})
-public class AccountsServiceTest {
+public class AccountServiceTest {
 
     @Autowired
     private AccountsService accountsService;
 
     @Test
     void testGetAccounts() {
-        List<Accounts> accounts = accountsService.getAccounts(200);
+        List<Account> accounts = accountsService.getAccountsByCustomer(200);
         assertEquals(accounts.size(), 2);
     }
 }

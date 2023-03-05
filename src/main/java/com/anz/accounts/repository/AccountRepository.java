@@ -13,7 +13,7 @@ public class AccountRepository {
 
     private final AccountRepositoryProvider accountRepositoryProvider;
 
-    public List<AccountList> getAccounts(long customerId) {
+    public List<AccountList> getAccountsByCustomerId(long customerId) {
         return accountRepositoryProvider.findAllByCustomerId(customerId);
     }
 }

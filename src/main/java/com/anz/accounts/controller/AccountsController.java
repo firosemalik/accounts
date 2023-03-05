@@ -1,8 +1,9 @@
 package com.anz.accounts.controller;
 
-import com.anz.accounts.api.AccountList;
 import com.anz.accounts.api.Accounts;
-import com.anz.accounts.component.service.AccountsService;
+import com.anz.accounts.api.Account;
+import com.anz.accounts.controller.validator.RequiredHeaders;
+import com.anz.accounts.service.AccountsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,9 @@ public class AccountsController {
     private final AccountsService accountsService;
 
     @GetMapping(value = "v{version}/accounts/{customerId}")
-    public ResponseEntity<AccountList> getAccounts(@PathVariable final int version, @PathVariable final long customerId,
-                                                   @RequestHeader final HttpHeaders httpHeaders) {
-        List<Accounts> accounts = this.accountsService.getAccounts(customerId);
-        return new ResponseEntity<>(AccountList.builder().accounts(accounts).build(), HttpStatus.OK);
+    public ResponseEntity<Accounts> getAccounts(@PathVariable final int version, @PathVariable final long customerId,
+                                                @RequestHeader @RequiredHeaders final HttpHeaders httpHeaders) {
+        List<Account> accounts = this.accountsService.getAccountsByCustomer(customerId);
+        return new ResponseEntity<>(Accounts.builder().accounts(accounts).build(), HttpStatus.OK);
     }
 }

@@ -24,7 +24,9 @@ public class AccountTransaction {
     @ManyToOne
     @JoinColumn(name = "accountId", referencedColumnName = "ACCOUNT_ID", updatable = false, insertable = false)
     @Setter(AccessLevel.PRIVATE)
-    private AccountList accountId;
+    private AccountList account;
+
+    private long accountId;
 
     @Column(name = "VALUE_DATE")
     @NotNull
