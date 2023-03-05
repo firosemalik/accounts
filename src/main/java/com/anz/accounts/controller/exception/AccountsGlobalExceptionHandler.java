@@ -31,6 +31,19 @@ public class AccountsGlobalExceptionHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException exception,
+                                                                   HttpServletRequest request) {
+        this.logException(exception, request, HttpStatus.BAD_REQUEST);
+        Status badRequest = Status.BAD_REQUEST;
+        return new ResponseEntity<>(
+                ApiError.builder()
+                        .errorId(badRequest.getErrorId())
+                        .message(badRequest.getMessage())
+                        .detail(exception.getMessage())
+                        .build(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<ApiError> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                     HttpServletRequest request) {

@@ -2,6 +2,7 @@ package com.anz.accounts.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
@@ -11,6 +12,6 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class Transactions {
+public class Transactions extends RepresentationModel<Transactions> {
     private List<Transaction> transactions;
 }

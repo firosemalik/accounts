@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 @Setter
 public class Account {
 
-    private String customerName;
+    private long customerId;
     private String accountNumber;
     private String accountName;
     private AccountType accountType;

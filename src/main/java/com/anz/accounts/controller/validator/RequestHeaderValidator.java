@@ -3,6 +3,7 @@ package com.anz.accounts.controller.validator;
 import com.anz.accounts.api.MandatoryHeaders;
 import com.anz.accounts.controller.exception.AuthorisationException;
 import com.anz.accounts.controller.exception.InvalidRequestException;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +23,10 @@ public class RequestHeaderValidator implements ConstraintValidator<RequiredHeade
         if (requestHeaders == null) {
             throw new IllegalArgumentException("HttpHeaders is null");
         }
-        if (requestHeaders.getFirst(MandatoryHeaders.TRACE_ID) == null) {
+        if (Strings.isBlank(requestHeaders.getFirst(MandatoryHeaders.TRACE_ID))) {
             throw new InvalidRequestException("Request header TRACE_ID missing");
         }
-        if (requestHeaders.getFirst(MandatoryHeaders.ACCESS_TOKEN) == null) {
+        if (Strings.isBlank(requestHeaders.getFirst(MandatoryHeaders.ACCESS_TOKEN))) {
             throw new AuthorisationException("Request header ACCESS_TOKEN missing");
         }
         return true;

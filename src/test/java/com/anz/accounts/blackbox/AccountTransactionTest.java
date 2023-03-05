@@ -1,9 +1,8 @@
 package com.anz.accounts.blackbox;
 
-
 import com.anz.accounts.AccountsApplication;
-import com.anz.accounts.api.Accounts;
 import com.anz.accounts.api.MandatoryHeaders;
+import com.anz.accounts.api.Transactions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(classes = AccountsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"/db/cleanup.sql", "/db/accounts.sql"})
-@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = {"/db/cleanup.sql"})
-public class AccountTest {
+//@Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = {"/db/cleanup.sql"})
+public class AccountTransactionTest {
 
-    public static final String V_1_ACCOUNTS = "http://localhost:8080/v1/accounts";
+    public static final String V_1_ACCOUNTS = "http://localhost:8080/v1/accounts/";
     @Autowired
     private TestRestTemplate testRestTemplate;
 
@@ -36,22 +35,21 @@ public class AccountTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(MandatoryHeaders.TRACE_ID, "123");
         httpHeaders.add(MandatoryHeaders.ACCESS_TOKEN, "200");
-        ResponseEntity<Accounts> responseEntity = this.testRestTemplate.exchange(V_1_ACCOUNTS, HttpMethod.GET, new HttpEntity<>(httpHeaders), Accounts.class);
-        Accounts body = responseEntity.getBody();
+        ResponseEntity<Transactions> responseEntity = this.testRestTemplate
+                .exchange(V_1_ACCOUNTS + "100/transactions", HttpMethod.GET, new HttpEntity<>(httpHeaders), Transactions.class);
+        Transactions body = responseEntity.getBody();
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(body);
-        assertEquals(2, body.getAccounts().size());
+        assertEquals(2, body.getTransactions().size());
     }
 
-
     @Test
-    void getAccounts_400() {
+    void getAccounts101_404() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(MandatoryHeaders.TRACE_ID, "123");
-        httpHeaders.add(MandatoryHeaders.ACCESS_TOKEN, "ABC");
-        ResponseEntity<Accounts> responseEntity = this.testRestTemplate.exchange(V_1_ACCOUNTS, HttpMethod.GET, new HttpEntity<>(httpHeaders), Accounts.class);
-        Accounts body = responseEntity.getBody();
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertNotNull(body);
+        httpHeaders.add(MandatoryHeaders.ACCESS_TOKEN, "200");
+        ResponseEntity<Transactions> responseEntity = this.testRestTemplate
+                .exchange(V_1_ACCOUNTS + "101/transactions", HttpMethod.GET, new HttpEntity<>(httpHeaders), Transactions.class);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 }

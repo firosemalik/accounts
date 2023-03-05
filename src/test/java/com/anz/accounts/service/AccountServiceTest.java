@@ -2,9 +2,11 @@ package com.anz.accounts.service;
 
 import com.anz.accounts.AccountsApplication;
 import com.anz.accounts.api.Account;
+import com.anz.accounts.api.MandatoryHeaders;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -23,7 +25,9 @@ public class AccountServiceTest {
 
     @Test
     void testGetAccounts() {
-        List<Account> accounts = accountsService.getAccountsByCustomer(200);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(MandatoryHeaders.ACCESS_TOKEN, "200");
+        List<Account> accounts = accountsService.getAccounts(httpHeaders);
         assertEquals(accounts.size(), 2);
     }
 }
