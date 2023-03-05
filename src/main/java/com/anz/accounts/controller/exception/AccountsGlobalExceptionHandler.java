@@ -21,7 +21,7 @@ public class AccountsGlobalExceptionHandler {
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ApiError> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException exception,
                                                                      HttpServletRequest request) {
-        this.logException(exception, request, HttpStatus.BAD_REQUEST);
+        this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
         Status badRequest = Status.BAD_REQUEST;
         return new ResponseEntity<>(
                 ApiError.builder()
@@ -34,7 +34,7 @@ public class AccountsGlobalExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException exception,
                                                                    HttpServletRequest request) {
-        this.logException(exception, request, HttpStatus.BAD_REQUEST);
+        this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
         Status badRequest = Status.BAD_REQUEST;
         return new ResponseEntity<>(
                 ApiError.builder()
@@ -47,7 +47,7 @@ public class AccountsGlobalExceptionHandler {
     @ExceptionHandler({ResourceNotFoundException.class})
     public ResponseEntity<ApiError> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                     HttpServletRequest request) {
-        this.logException(exception, request, HttpStatus.NOT_FOUND);
+        this.logException(exception, request, HttpStatus.NOT_FOUND, false);
         Status badRequest = Status.NOT_FOUND;
         return new ResponseEntity<>(
                 ApiError.builder()
@@ -60,7 +60,7 @@ public class AccountsGlobalExceptionHandler {
     @ExceptionHandler({ValidationException.class})
     public ResponseEntity<ApiError> handleValidationException(ValidationException exception,
                                                               HttpServletRequest request) {
-        this.logException(exception, request, HttpStatus.BAD_REQUEST);
+        this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
         if (exception.getCause() instanceof InvalidRequestException) {
             Status badRequest = Status.BAD_REQUEST;
             return new ResponseEntity<>(
@@ -84,7 +84,7 @@ public class AccountsGlobalExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ApiError> handleCatchAll(Exception exception,
                                                    HttpServletRequest request) {
-        this.logException(exception, request, HttpStatus.INTERNAL_SERVER_ERROR);
+        this.logException(exception, request, HttpStatus.INTERNAL_SERVER_ERROR, true);
         Status badRequest = Status.INTERNAL_SERVER_ERROR;
         return new ResponseEntity<>(
                 ApiError.builder()
@@ -93,8 +93,13 @@ public class AccountsGlobalExceptionHandler {
                         .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private void logException(Throwable throwable, HttpServletRequest request, HttpStatus httpStatus) {
+    private void logException(Throwable throwable, HttpServletRequest request, HttpStatus httpStatus, boolean error) {
         //There can be security risk of logging request
-        log.error("Exception in ms-accounts ".concat(httpStatus.toString()), throwable);
+        if (error) {
+            log.error("Exception in ms-accounts ".concat(httpStatus.toString()), throwable);
+        } else {
+            log.warn("Exception in ms-accounts ".concat(httpStatus.toString()), throwable);
+        }
+
     }
 }

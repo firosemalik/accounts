@@ -1,4 +1,4 @@
-package com.anz.accounts.repository.model;
+package com.anz.accounts.repository.entity;
 
 import lombok.*;
 
@@ -19,23 +19,18 @@ public class AccountTransaction {
     @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TRANSACTION_ID")
-    private long transactionId;
+    private Long transactionId;
 
     @ManyToOne
     @JoinColumn(name = "accountId", referencedColumnName = "ACCOUNT_ID", updatable = false, insertable = false)
     @Setter(AccessLevel.PRIVATE)
-    private AccountList account;
+    private Account account;
 
-    private long accountId;
+    private Long accountId;
 
     @Column(name = "VALUE_DATE")
     @NotNull
     private ZonedDateTime valueDate;
-
-    @Column(name = "CURRENCY")
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Currency currency;
 
     @Column(name = "CREDIT_AMOUNT")
     private BigDecimal creditAmount;

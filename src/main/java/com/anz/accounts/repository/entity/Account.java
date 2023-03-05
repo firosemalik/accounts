@@ -1,4 +1,4 @@
-package com.anz.accounts.repository.model;
+package com.anz.accounts.repository.entity;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -14,17 +14,17 @@ import java.time.ZonedDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountList {
+public class Account {
 
     @Id
     @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ACCOUNT_ID")
-    private long accountId;
+    private Long accountId;
 
     @Column(name = "CUSTOMER_ID")
     @NotNull
-    private long customerId;
+    private Long customerId;
 
     @Column(name = "ACCOUNT_NUMBER")
     @Length(max = 20)

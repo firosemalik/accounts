@@ -1,7 +1,7 @@
 package com.anz.accounts.api;
 
-import com.anz.accounts.repository.model.AccountType;
-import com.anz.accounts.repository.model.Currency;
+import com.anz.accounts.repository.entity.AccountType;
+import com.anz.accounts.repository.entity.Currency;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 

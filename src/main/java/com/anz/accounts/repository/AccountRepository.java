@@ -1,6 +1,6 @@
 package com.anz.accounts.repository;
 
-import com.anz.accounts.repository.model.AccountList;
+import com.anz.accounts.repository.entity.Account;
 import com.anz.accounts.repository.provider.AccountRepositoryProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ public class AccountRepository {
 
     private final AccountRepositoryProvider accountRepositoryProvider;
 
-    public List<AccountList> getAccountsByCustomerId(long customerId) {
+    public List<Account> getAccountsByCustomerId(Long customerId) {
         return accountRepositoryProvider.findAllByCustomerId(customerId);
     }
 }

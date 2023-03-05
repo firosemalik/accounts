@@ -1,6 +1,6 @@
 package com.anz.accounts.repository;
 
-import com.anz.accounts.repository.model.AccountTransaction;
+import com.anz.accounts.repository.entity.AccountTransaction;
 import com.anz.accounts.repository.provider.AccountTransactionRepositoryProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import java.util.List;
 public class AccountTransactionRepository {
     private final AccountTransactionRepositoryProvider provider;
 
-    public List<AccountTransaction> getTransactionsByAccount(long accountId) {
+    public List<AccountTransaction> getTransactionsByAccount(Long accountId) {
         return this.provider.findAllByAccountId(accountId);
     }
 }

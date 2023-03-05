@@ -1,9 +1,9 @@
 package com.anz.accounts.blackbox;
 
 import com.anz.accounts.AccountsApplication;
+import com.anz.accounts.api.Accounts;
 import com.anz.accounts.api.ApiError;
 import com.anz.accounts.api.MandatoryHeaders;
-import com.anz.accounts.api.Transactions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,35 +16,34 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @ActiveProfiles("test")
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = {"/db/cleanup.sql", "/db/accounts.sql"})
 @Sql(executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD, scripts = {"/db/cleanup.sql"})
-public class AccountTransactionTest {
-
-    public static final String V_1_ACCOUNTS = "http://localhost:8080/v1/accounts/";
+public class AccountsTest {
 
     @Autowired
     private WebTestClient webTestClient;
+    public static final String V_1_ACCOUNTS = "http://localhost:8080/v1/accounts";
 
     @Test
-    void getTransactions_200() {
+    public void getAccounts_200() {
         webTestClient.get()
-                .uri(V_1_ACCOUNTS.concat("100/transactions"))
+                .uri(V_1_ACCOUNTS)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(MandatoryHeaders.TRACE_ID, "123")
                 .header(MandatoryHeaders.ACCESS_TOKEN, "200")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
-                .expectBody(Transactions.class);
+                .expectBody(Accounts.class);
     }
 
     @Test
-    void getTransactions101_404() {
+    public void getAccounts_400() {
         webTestClient.get()
-                .uri(V_1_ACCOUNTS.concat("101/transactions"))
+                .uri(V_1_ACCOUNTS)
                 .accept(MediaType.APPLICATION_JSON)
                 .header(MandatoryHeaders.TRACE_ID, "123")
-                .header(MandatoryHeaders.ACCESS_TOKEN, "200")
+                .header(MandatoryHeaders.ACCESS_TOKEN, "ABC")
                 .exchange()
-                .expectStatus().isNotFound()
+                .expectStatus().isBadRequest()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(ApiError.class);
     }

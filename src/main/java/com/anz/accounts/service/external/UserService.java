@@ -1,7 +1,12 @@
 package com.anz.accounts.service.external;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+/**
+ * This class is only for demonstration purpose
+ * This should be a separate microservice where ms-account should make the call to access this.
+ */
 @Service
 public class UserService {
 
@@ -17,5 +22,9 @@ public class UserService {
             throw new IllegalArgumentException("Invalid token");
         }
         return customerId;
+    }
+
+    public boolean isEntitled(long accountId, HttpHeaders httpHeaders) {
+        return true;
     }
 }

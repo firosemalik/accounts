@@ -1,5 +1,6 @@
 package com.anz.accounts.controller;
 
+import com.anz.accounts.BaseController;
 import com.anz.accounts.api.Account;
 import com.anz.accounts.api.Accounts;
 import com.anz.accounts.controller.validator.RequiredHeaders;
@@ -19,7 +20,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-public class AccountsController {
+public class AccountsController extends BaseController {
 
     private final AccountsService accountsService;
 
@@ -27,7 +28,9 @@ public class AccountsController {
     public ResponseEntity<Accounts> getAccounts(@PathVariable final int version,
                                                 @RequestHeader @RequiredHeaders final HttpHeaders httpHeaders) {
         List<Account> accounts = this.accountsService.getAccounts(httpHeaders);
-        return new ResponseEntity<>(Accounts.builder().accounts(accounts).build(), HttpStatus.OK);
+        return new ResponseEntity<>(Accounts.builder()
+                .accounts(accounts)
+                .build().add(getAccountsLink(version, httpHeaders).withSelfRel()), HttpStatus.OK);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.anz.accounts.repository.model;
+package com.anz.accounts.repository.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
