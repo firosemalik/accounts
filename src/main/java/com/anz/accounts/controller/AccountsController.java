@@ -2,7 +2,7 @@ package com.anz.accounts.controller;
 
 import com.anz.accounts.api.Accounts;
 import com.anz.accounts.controller.validator.RequiredHeaders;
-import com.anz.accounts.service.AccountsService;
+import com.anz.accounts.component.AccountsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.anz.accounts.service;
+package com.anz.accounts.component;
 
 import com.anz.accounts.api.MandatoryHeaders;
 import com.anz.accounts.api.Transaction;
@@ -6,8 +6,8 @@ import com.anz.accounts.controller.exception.AuthorisationException;
 import com.anz.accounts.controller.exception.ResourceNotFoundException;
 import com.anz.accounts.repository.AccountTransactionRepository;
 import com.anz.accounts.repository.entity.AccountTransaction;
-import com.anz.accounts.service.external.UserService;
-import com.anz.accounts.service.util.DateTimeFormat;
+import com.anz.accounts.component.external.UserService;
+import com.anz.accounts.component.util.DateTimeFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

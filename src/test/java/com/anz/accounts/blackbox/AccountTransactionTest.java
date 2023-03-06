@@ -109,6 +109,19 @@ public class AccountTransactionTest {
     }
 
     @Test
+    void getTransactions_withoutNullAccountId_400() {
+        webTestClient.get()
+                .uri(V_1_ACCOUNTS.concat("null/transactions"))
+                .accept(MediaType.APPLICATION_JSON)
+                .header(MandatoryHeaders.TRACE_ID, "200")
+                .header(MandatoryHeaders.ACCESS_TOKEN, "200")
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody(ApiError.class);
+    }
+
+    @Test
     void getTransactions_withoutAccessToken_401() {
         webTestClient.get()
                 .uri(V_1_ACCOUNTS.concat("100/transactions"))

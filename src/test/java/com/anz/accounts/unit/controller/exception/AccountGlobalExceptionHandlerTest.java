@@ -68,7 +68,7 @@ public class AccountGlobalExceptionHandlerTest {
     }
 
     @Test
-    void testHandleInvalidRequestException_shouldReturnError() {
+    void testHandleValidationCausedByInvalidRequestException_shouldReturnError() {
         ResponseEntity<ApiError> error = accountsGlobalExceptionHandler
                 .handleValidationException(new ValidationException(new InvalidRequestException("Missing trace id header")), request);
 
@@ -85,10 +85,49 @@ public class AccountGlobalExceptionHandlerTest {
                 });
     }
 
+
+    @Test
+    void testHandleInvalidRequestException_shouldReturnError() {
+        ResponseEntity<ApiError> error = accountsGlobalExceptionHandler
+                .handleInvalidRequestException(new InvalidRequestException("Missing trace id header"), request);
+
+        assertAll("response",
+                () -> {
+                    assertThat(error.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+                    assertNotNull(error.getBody());
+                    ApiError body = error.getBody();
+                    assertAll("body",
+                            () -> assertThat(body.getErrorId(), is("API-400")),
+                            () -> assertThat(body.getMessage(), is("Bad Request")),
+                            () -> assertThat(body.getDetail(), is("Missing trace id header")));
+
+                });
+    }
+
+
+    @Test
+    void testHandleValidationCausedByUnauthorisedException_shouldReturnError() {
+        ResponseEntity<ApiError> error = accountsGlobalExceptionHandler
+                .handleValidationException(new ValidationException(new AuthorisationException("Missing access token header")), request);
+
+        assertAll("response",
+                () -> {
+                    assertThat(error.getStatusCode(), is(HttpStatus.UNAUTHORIZED));
+                    assertNotNull(error.getBody());
+                    ApiError body = error.getBody();
+                    assertAll("body",
+                            () -> assertThat(body.getErrorId(), is("API-401")),
+                            () -> assertThat(body.getMessage(), is("Unauthorized")),
+                            () -> assertThat(body.getDetail(), is("Missing access token header")));
+
+                });
+    }
+
+
     @Test
     void testHandleUnauthorisedException_shouldReturnError() {
         ResponseEntity<ApiError> error = accountsGlobalExceptionHandler
-                .handleValidationException(new ValidationException(new AuthorisationException("Missing access token header")), request);
+                .handleAuthorisationException(new AuthorisationException("Missing access token header"), request);
 
         assertAll("response",
                 () -> {

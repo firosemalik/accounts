@@ -1,4 +1,4 @@
-package com.anz.accounts.service;
+package com.anz.accounts.component;
 
 import com.anz.accounts.AccountsApplication;
 import com.anz.accounts.api.MandatoryHeaders;

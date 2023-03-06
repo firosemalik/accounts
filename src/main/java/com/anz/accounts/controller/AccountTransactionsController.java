@@ -3,7 +3,7 @@ package com.anz.accounts.controller;
 import com.anz.accounts.api.Transaction;
 import com.anz.accounts.api.Transactions;
 import com.anz.accounts.controller.validator.RequiredHeaders;
-import com.anz.accounts.service.AccountTransactionsService;
+import com.anz.accounts.component.AccountTransactionsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

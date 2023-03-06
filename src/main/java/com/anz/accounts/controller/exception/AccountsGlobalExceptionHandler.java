@@ -36,12 +36,7 @@ public class AccountsGlobalExceptionHandler {
                                                                    HttpServletRequest request) {
         this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
         Status badRequest = Status.BAD_REQUEST;
-        return new ResponseEntity<>(
-                ApiError.builder()
-                        .errorId(badRequest.getErrorId())
-                        .message(badRequest.getMessage())
-                        .detail(exception.getMessage())
-                        .build(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(buildError(badRequest, exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ResourceNotFoundException.class})
@@ -49,34 +44,39 @@ public class AccountsGlobalExceptionHandler {
                                                                     HttpServletRequest request) {
         this.logException(exception, request, HttpStatus.NOT_FOUND, false);
         Status badRequest = Status.NOT_FOUND;
+        return new ResponseEntity<>(buildError(badRequest, exception.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler({InvalidRequestException.class})
+    public ResponseEntity<ApiError> handleInvalidRequestException(InvalidRequestException exception,
+                                                                  HttpServletRequest request) {
+        this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
+        Status badRequest = Status.BAD_REQUEST;
         return new ResponseEntity<>(
-                ApiError.builder()
-                        .errorId(badRequest.getErrorId())
-                        .message(badRequest.getMessage())
-                        .detail(exception.getMessage())
-                        .build(), HttpStatus.NOT_FOUND);
+                buildError(badRequest, exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({AuthorisationException.class})
+    public ResponseEntity<ApiError> handleAuthorisationException(AuthorisationException exception,
+                                                                 HttpServletRequest request) {
+        this.logException(exception, request, HttpStatus.UNAUTHORIZED, false);
+        Status badRequest = Status.UNAUTHORIZED;
+        return new ResponseEntity<>(
+                buildError(badRequest, exception.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({ValidationException.class})
     public ResponseEntity<ApiError> handleValidationException(ValidationException exception,
                                                               HttpServletRequest request) {
-        this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
         if (exception.getCause() instanceof InvalidRequestException) {
+            this.logException(exception, request, HttpStatus.BAD_REQUEST, false);
             Status badRequest = Status.BAD_REQUEST;
-            return new ResponseEntity<>(
-                    ApiError.builder()
-                            .errorId(badRequest.getErrorId())
-                            .message(badRequest.getMessage())
-                            .detail(exception.getCause().getMessage())
-                            .build(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(buildError(badRequest, exception.getCause().getMessage()), HttpStatus.BAD_REQUEST);
         } else if (exception.getCause() instanceof AuthorisationException) {
+            this.logException(exception, request, HttpStatus.UNAUTHORIZED, false);
             Status badRequest = Status.UNAUTHORIZED;
-            return new ResponseEntity<>(
-                    ApiError.builder()
-                            .errorId(badRequest.getErrorId())
-                            .message(badRequest.getMessage())
-                            .detail(exception.getCause().getMessage())
-                            .build(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(buildError(badRequest, exception.getCause().getMessage()), HttpStatus.UNAUTHORIZED);
         }
         return handleCatchAll(exception, request);
     }
@@ -92,6 +92,16 @@ public class AccountsGlobalExceptionHandler {
                         .message(badRequest.getMessage())
                         .build(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+    private ApiError buildError(Status badRequest, String message) {
+        return ApiError.builder()
+                .errorId(badRequest.getErrorId())
+                .message(badRequest.getMessage())
+                .detail(message)
+                .build();
+    }
+
 
     private void logException(Throwable throwable, HttpServletRequest request, HttpStatus httpStatus, boolean error) {
         //There can be security risk of logging request
