@@ -17,6 +17,7 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(classes = AccountsApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -48,10 +49,10 @@ public class AccountTransactionTest {
         assertEquals(transaction.getAccountName(), "AUCurrent626");
         assertEquals(transaction.getAccountNumber(), "385309209");
         assertEquals(transaction.getCurrency(), Currency.AUD);
-        assertEquals(transaction.getCreditAmount(), null);
+        assertNull(transaction.getCreditAmount());
         assertEquals(transaction.getDebitAmount().toString(), "3000.29");
         assertEquals(transaction.getValueDate(), "04/25/2022 - 15:12:56 AEST");
-        assertEquals(transaction.getTransactionNarrative(), null);
+        assertNull(transaction.getTransactionNarrative());
     }
 
     @Test
@@ -72,7 +73,7 @@ public class AccountTransactionTest {
     @Test
     void getTransactions_withAccountHoldingNoTransactions_404() {
         webTestClient.get()
-                .uri(V_1_ACCOUNTS.concat("101/transactions"))
+                .uri(V_1_ACCOUNTS.concat("201/transactions"))
                 .accept(MediaType.APPLICATION_JSON)
                 .header(MandatoryHeaders.TRACE_ID, "123")
                 .header(MandatoryHeaders.ACCESS_TOKEN, "200")
