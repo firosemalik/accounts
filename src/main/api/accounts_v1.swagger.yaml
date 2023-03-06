@@ -1,0 +1,232 @@
+openapi: 3.0.1
+info:
+  title: MS-Accounts
+  version: v1
+servers:
+  - url: http://localhost:8080
+paths:
+  /v{version}/accounts:
+    get:
+      tags:
+        - accounts
+      operationId: getAccounts
+      summary: Find accounts by customer
+      description: Returns list of accounts
+      parameters:
+        - $ref: '#/components/parameters/AccessToken'
+        - $ref: '#/components/parameters/TraceId'
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Accounts'
+        "400":
+          description: Invalid Request
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorised
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: Resource not available
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+
+  /v{version}/accounts/{accountId}/transactions:
+    get:
+      tags:
+        - account-transactions
+      operationId: getTransactions
+      summary: Find transactions attached to the account
+      description: Returns list of transactions
+      parameters:
+        - $ref: '#/components/parameters/AccessToken'
+        - $ref: '#/components/parameters/TraceId'
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Transactions'
+        "400":
+          description: Invalid Request
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "401":
+          description: Unauthorised
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "404":
+          description: Resource not available
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        "500":
+          description: Internal Server Error
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+components:
+  parameters:
+    AccessToken:
+      in: header
+      name: X-ACCESS-TOKEN
+      description: Valid access token that represents the user context.
+      required: true
+      schema:
+        type: string
+
+    TraceId:
+      in: header
+      name: X-TRACE-ID
+      description: Trace id for log aggregration
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    Account:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int64
+        accountNumber:
+          type: string
+        accountName:
+          type: string
+        accountType:
+          type: string
+          enum:
+            - SAVINGS
+            - CURRENT
+        balancedDateTime:
+          type: string
+          format: date-time
+        currency:
+          type: string
+          enum:
+            - SGD
+            - AUD
+        balanceAmount:
+          type: number
+    Accounts:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+    Link:
+      type: object
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
+        hreflang:
+          type: string
+        media:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        deprecation:
+          type: string
+        profile:
+          type: string
+        name:
+          type: string
+    Transaction:
+      type: object
+      properties:
+        accountNumber:
+          type: string
+        accountName:
+          type: string
+        transactionType:
+          type: string
+          enum:
+            - DEBIT
+            - CREDIT
+        valueDate:
+          type: string
+          format: date-time
+        currency:
+          type: string
+          enum:
+            - SGD
+            - AUD
+        creditAmount:
+          type: number
+        debitAmount:
+          type: number
+        transactionNarrative:
+          type: string
+    Transactions:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+    ApiError:
+      type: object
+      properties:
+        errorId:
+          type: string
+        message:
+          type: string
+        detail:
+          type: string
