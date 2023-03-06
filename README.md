@@ -41,7 +41,6 @@ gradle bootRun
 ```
 
 ####To run the tests locally:
-The docker-compose up will start the sidecars (postgres)
 ```
 cd src\main\docker
 docker-compose up
@@ -49,7 +48,6 @@ gradle clean test
 ```
 
 ####To build locally:
-The docker-compose up will start the sidecars (postgres)
 ```
 cd src\main\docker
 docker-compose up
