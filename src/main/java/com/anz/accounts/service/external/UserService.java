@@ -25,6 +25,9 @@ public class UserService {
     }
 
     public boolean isEntitled(long accountId, HttpHeaders httpHeaders) {
+        if (accountId == 101) {
+            return false;
+        }
         return true;
     }
 }
