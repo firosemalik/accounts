@@ -1,4 +1,4 @@
-package com.anz.accounts.component.external;
+package com.anz.accounts.service.external;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;

@@ -7,6 +7,7 @@ import com.anz.accounts.controller.exception.AuthorisationException;
 import com.anz.accounts.controller.exception.ResourceNotFoundException;
 import com.anz.accounts.repository.entity.Currency;
 import com.anz.accounts.repository.entity.TransactionType;
+import com.anz.accounts.service.AccountTransactionsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

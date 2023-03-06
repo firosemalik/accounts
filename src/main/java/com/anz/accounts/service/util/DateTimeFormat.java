@@ -1,4 +1,4 @@
-package com.anz.accounts.component.util;
+package com.anz.accounts.service.util;
 
 import java.time.format.DateTimeFormatter;
 
