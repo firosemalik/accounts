@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class Transaction {
     private String accountNumber;
     private String accountName;
     private TransactionType transactionType;
-    private ZonedDateTime valueDate;
+    private String valueDate;
     private Currency currency;
     private BigDecimal creditAmount;
     private BigDecimal debitAmount;

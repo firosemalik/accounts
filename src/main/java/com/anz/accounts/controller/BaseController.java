@@ -1,7 +1,5 @@
-package com.anz.accounts;
+package com.anz.accounts.controller;
 
-import com.anz.accounts.controller.AccountTransactionsController;
-import com.anz.accounts.controller.AccountsController;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpHeaders;
 

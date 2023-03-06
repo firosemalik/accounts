@@ -7,6 +7,7 @@ import com.anz.accounts.controller.exception.ResourceNotFoundException;
 import com.anz.accounts.repository.AccountTransactionRepository;
 import com.anz.accounts.repository.entity.AccountTransaction;
 import com.anz.accounts.service.external.UserService;
+import com.anz.accounts.service.util.DateTimeFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -50,6 +51,7 @@ public class AccountTransactionsService {
                 .currency(t.getAccount().getCurrency())
                 .creditAmount(t.getCreditAmount())
                 .debitAmount(t.getDebitAmount())
-                .valueDate(t.getValueDate()).build()).collect(Collectors.toList());
+                .valueDate(t.getValueDate().format(DateTimeFormat.FORMATTER))
+                .build()).collect(Collectors.toList());
     }
 }
